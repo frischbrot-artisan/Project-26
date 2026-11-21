@@ -1,0 +1,59 @@
+name: HEX-Dateien bauen
+# Baut alle Firmwares und stellt jede HEX-Datei einzeln (nicht gezippt) unter "Artifacts" bereit.
+on:
+  push:
+  workflow_dispatch:
+jobs:
+  hex:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - name: AVR-Toolchain installieren
+        run: sudo apt-get update && sudo apt-get install -y gcc-avr avr-libc binutils-avr make unzip
+      - name: Firmware bauen
+        run: sh ./build_hex.sh
+      - name: LWCloneU2_Resurrected_DUO_Rev0.4b.hex
+        uses: actions/upload-artifact@v7
+        with:
+          path: hex/LWCloneU2_Resurrected_DUO_Rev0.4b.hex
+          archive: false
+      - name: LWCloneU2_Resurrected_SLIM_Rev0.4b.hex
+        uses: actions/upload-artifact@v7
+        with:
+          path: hex/LWCloneU2_Resurrected_SLIM_Rev0.4b.hex
+          archive: false
+      - name: LWCloneU2_Resurrected_FORCE_Rev0.4b.hex
+        uses: actions/upload-artifact@v7
+        with:
+          path: hex/LWCloneU2_Resurrected_FORCE_Rev0.4b.hex
+          archive: false
+      - name: ROTORR_Rev0.4b.hex
+        uses: actions/upload-artifact@v7
+        with:
+          path: hex/ROTORR_Rev0.4b.hex
+          archive: false
+      - name: VERSUS_Rev0.4b.hex
+        uses: actions/upload-artifact@v7
+        with:
+          path: hex/VERSUS_Rev0.4b.hex
+          archive: false
+      - name: LWCloneU2_Resurrected_VPINBALL_Rev0.4b_ATmega2560.hex
+        uses: actions/upload-artifact@v7
+        with:
+          path: hex/LWCloneU2_Resurrected_VPINBALL_Rev0.4b_ATmega2560.hex
+          archive: false
+      - name: LWCloneU2_Resurrected_VPINBALL_Rev0.4b_ATmega16U2.hex
+        uses: actions/upload-artifact@v7
+        with:
+          path: hex/LWCloneU2_Resurrected_VPINBALL_Rev0.4b_ATmega16U2.hex
+          archive: false
+      - name: LWCloneU2_Resurrected_ARCADE_Rev0.4b_ATmega2560.hex
+        uses: actions/upload-artifact@v7
+        with:
+          path: hex/LWCloneU2_Resurrected_ARCADE_Rev0.4b_ATmega2560.hex
+          archive: false
+      - name: LWCloneU2_Resurrected_ARCADE_Rev0.4b_ATmega16U2.hex
+        uses: actions/upload-artifact@v7
+        with:
+          path: hex/LWCloneU2_Resurrected_ARCADE_Rev0.4b_ATmega16U2.hex
+          archive: false
