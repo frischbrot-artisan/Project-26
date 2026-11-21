@@ -1,7 +1,7 @@
 #!/bin/sh
 # LWCloneU2 Resurrected Rev 0.4b - baut ALLE Firmware-HEX-Dateien und legt sie in den Ordner hex/:
-#   DUO, SLIM, FORCE (Pro Micro), VPINBALL und ARCADE (Arduino Mega 2560: ATmega2560 + ATmega16U2)
-#   sowie ROTORR (2 Trackbaelle + 2 Spinner) und VERSUS (2-Spieler-Tastatur-Encoder), beide am Pro Micro
+#   DUO, SLIM, FORCE, VERSUS (Pro Micro), VPINBALL und ARCADE (Arduino Mega 2560: ATmega2560 + ATmega16U2)
+#   sowie ROTORR (2 Trackbaelle + 2 Spinner, Pro Micro)
 # Voraussetzung (Linux/WSL): sudo apt install gcc-avr avr-libc binutils-avr make unzip
 set -e
 REV=0.4b
@@ -24,7 +24,7 @@ else
   exit 1
 fi
 FW="$ROOT/source/firmware"
-for D in lwc_promicro_driver lwc_mega_driver lwc_arcade_driver rotorr_driver versus_driver; do
+for D in lwc_promicro_driver lwc_mega_driver lwc_arcade_driver rotorr_driver lwc_versus_driver; do
   if [ ! -d "$FW/$D" ]; then
     echo "FEHLER: In der ZIP-Datei fehlt source/firmware/$D - alte oder falsche source-ZIP?"
     echo "Bitte source_firmware.zip aus dem Ordner github der Komplett-Datei hochladen."
@@ -61,14 +61,14 @@ cp rotorr.hex "$OUT"
 check_name "$OUT" "ROTORR Rev $REV"
 
 # ---------------------------------------------------------------- Pro Micro: VERSUS (32 Taster, Tastatur mit N-Key-Rollover)
-cd "$FW/versus_driver"
-echo; echo "=== Baue VERSUS Rev $REV ==="
+cd "$FW/lwc_versus_driver"
+echo; echo "=== Baue LWCloneU2 Resurrected VERSUS Rev $REV ==="
 make clean > /dev/null 2>&1 || true
 make all
-avr-size --mcu=atmega32u4 -C versus.elf || true
-OUT="$ROOT/hex/VERSUS_Rev${REV}.hex"
-cp versus.hex "$OUT"
-check_name "$OUT" "VERSUS Rev $REV"
+avr-size --mcu=atmega32u4 -C lwc_versus_driver.elf || true
+OUT="$ROOT/hex/LWCloneU2_Resurrected_VERSUS_Rev${REV}.hex"
+cp lwc_versus_driver.hex "$OUT"
+check_name "$OUT" "LWCloneU2 Resurrected VERSUS Rev $REV"
 
 # ---------------------------------------------------------------- Arduino Mega: VPINBALL, ARCADE
 for BN in VPINBALL ARCADE; do

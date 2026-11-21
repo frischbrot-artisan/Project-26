@@ -9,7 +9,7 @@ Ein Durchlauf baut die HEX-Dateien **aller** Boards:
 |---|---|
 | DUO, SLIM, FORCE (Pro Micro) | `LWCloneU2_Resurrected_DUO_Rev0.4b.hex`, `…_SLIM_Rev0.4b.hex`, `…_FORCE_Rev0.4b.hex` |
 | ROTORR (Pro Micro) | `ROTORR_Rev0.4b.hex` |
-| VERSUS (Pro Micro) | `VERSUS_Rev0.4b.hex` |
+| VERSUS (Pro Micro) | `LWCloneU2_Resurrected_VERSUS_Rev0.4b.hex` |
 | VPINBALL (Arduino Mega 2560) | `LWCloneU2_Resurrected_VPINBALL_Rev0.4b_ATmega2560.hex`, `…_ATmega16U2.hex` |
 | ARCADE (Arduino Mega 2560) | `LWCloneU2_Resurrected_ARCADE_Rev0.4b_ATmega2560.hex`, `…_ATmega16U2.hex` |
 
@@ -20,7 +20,7 @@ Ein Durchlauf baut die HEX-Dateien **aller** Boards:
    (bei einem öffentlichen Repository zusätzlich `LICENSE.txt` aus dem Hauptordner der Komplett-Datei) → **Commit changes**.
 3. **Add file → Create new file**, Name `.github/workflows/build.yml`, Inhalt aus `build.yml (Inhalt fuer .github-workflows).txt` einfügen → **Commit changes**.
 4. Reiter **Actions**: Der Lauf „HEX-Dateien bauen“ startet von selbst (ca. 3 min).
-5. Lauf anklicken → unten **Artifacts** → `HEX_Rev0.4b` herunterladen, entpacken, HEX-Dateien prüfen und als Release veröffentlichen (Releases → Create a new release → Dateien anhängen → Publish release).
+5. Lauf anklicken → unten **Artifacts**: jede HEX-Datei steht dort einzeln (ohne ZIP) → herunterladen, prüfen und als Release veröffentlichen (Releases → Create a new release → Dateien anhängen → Publish release).
 
 Ein älteres Repository für ein einzelnes Board-System (z. B. mit `source_vpinball.zip`) lässt sich weiterverwenden: `build_hex.sh`
 ersetzen und `source_firmware.zip` hochladen.
