@@ -1,8 +1,13 @@
 name: HEX-Dateien bauen
 # Baut alle Firmwares und stellt jede HEX-Datei einzeln (nicht gezippt) unter "Artifacts" bereit.
+# Wird ein Release veroeffentlicht, haengt der Lauf alle HEX-Dateien automatisch an dieses Release an.
 on:
   push:
   workflow_dispatch:
+  release:
+    types: [published]
+permissions:
+  contents: write
 jobs:
   hex:
     runs-on: ubuntu-latest
@@ -57,3 +62,8 @@ jobs:
         with:
           path: hex/LWCloneU2_Resurrected_ARCADE_Rev0.4b_ATmega16U2.hex
           archive: false
+      - name: HEX-Dateien an das Release anhaengen
+        if: github.event_name == 'release'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release upload "${{ github.event.release.tag_name }}" hex/*.hex --clobber --repo "${{ github.repository }}"
