@@ -1,7 +1,7 @@
 #!/bin/sh
 # LWCloneU2 Resurrected Rev 0.4b - baut ALLE Firmware-HEX-Dateien und legt sie in den Ordner hex/:
 #   DUO, SLIM, FORCE, VERSUS (Pro Micro), VPINBALL und ARCADE (Arduino Mega 2560: ATmega2560 + ATmega16U2)
-#   sowie ROTORR (2 Trackbaelle + 2 Spinner, Pro Micro)
+#   (ROTORR hat ein eigenes Paket mit eigenem Bau-Kit)
 # Voraussetzung (Linux/WSL): sudo apt install gcc-avr avr-libc binutils-avr make unzip
 set -e
 REV=0.4b
@@ -24,7 +24,7 @@ else
   exit 1
 fi
 FW="$ROOT/source/firmware"
-for D in lwc_promicro_driver lwc_mega_driver lwc_arcade_driver rotorr_driver lwc_versus_driver; do
+for D in lwc_promicro_driver lwc_mega_driver lwc_arcade_driver lwc_versus_driver; do
   if [ ! -d "$FW/$D" ]; then
     echo "FEHLER: In der ZIP-Datei fehlt source/firmware/$D - alte oder falsche source-ZIP?"
     echo "Bitte source_firmware.zip aus dem Ordner github der Komplett-Datei hochladen."
@@ -50,16 +50,6 @@ for V in DUO SLIM FORCE; do
   check_name "$OUT" "LWCloneU2 Resurrected $V Rev $REV"
 done
 
-# ---------------------------------------------------------------- Pro Micro: ROTORR (2 Trackbaelle + 2 Spinner, 4 USB-Maeuse)
-cd "$FW/rotorr_driver"
-echo; echo "=== Baue ROTORR Rev $REV ==="
-make clean > /dev/null 2>&1 || true
-make all
-avr-size --mcu=atmega32u4 -C rotorr.elf || true
-OUT="$ROOT/hex/ROTORR_Rev${REV}.hex"
-cp rotorr.hex "$OUT"
-check_name "$OUT" "ROTORR Rev $REV"
-
 # ---------------------------------------------------------------- Pro Micro: VERSUS (32 Taster, Tastatur mit N-Key-Rollover)
 cd "$FW/lwc_versus_driver"
 echo; echo "=== Baue LWCloneU2 Resurrected VERSUS Rev $REV ==="
@@ -73,14 +63,15 @@ check_name "$OUT" "LWCloneU2 Resurrected VERSUS Rev $REV"
 # ---------------------------------------------------------------- Arduino Mega: VPINBALL, ARCADE
 for BN in VPINBALL ARCADE; do
   if [ "$BN" = "ARCADE" ]; then DRV=lwc_arcade_driver; else DRV=lwc_mega_driver; fi
+  if [ "$BN" = "VPINBALL" ]; then BREV=0.9c; else BREV=$REV; fi   # VPINBALL: Platine + Firmware Rev 0.9c (Nudge, AREF 3,3 V, Plunger)
   cd "$FW/$DRV"
-  echo; echo "=== Baue LWCloneU2 Resurrected $BN Rev $REV (ATmega2560 + ATmega16U2) ==="
+  echo; echo "=== Baue LWCloneU2 Resurrected $BN Rev $BREV (ATmega2560 + ATmega16U2) ==="
   make all
   avr-size --mcu=atmega2560 -C m2560/${DRV}__m2560.elf || true
   avr-size --mcu=atmega16u2 -C m16u2/${DRV}__m16u2.elf || true
-  cp m2560/${DRV}__m2560.hex "$ROOT/hex/LWCloneU2_Resurrected_${BN}_Rev${REV}_ATmega2560.hex"
-  cp m16u2/${DRV}__m16u2.hex "$ROOT/hex/LWCloneU2_Resurrected_${BN}_Rev${REV}_ATmega16U2.hex"
-  check_name "$ROOT/hex/LWCloneU2_Resurrected_${BN}_Rev${REV}_ATmega16U2.hex" "LWCloneU2 Resurrected $BN Rev $REV"
+  cp m2560/${DRV}__m2560.hex "$ROOT/hex/LWCloneU2_Resurrected_${BN}_Rev${BREV}_ATmega2560.hex"
+  cp m16u2/${DRV}__m16u2.hex "$ROOT/hex/LWCloneU2_Resurrected_${BN}_Rev${BREV}_ATmega16U2.hex"
+  check_name "$ROOT/hex/LWCloneU2_Resurrected_${BN}_Rev${BREV}_ATmega16U2.hex" "LWCloneU2 Resurrected $BN Rev $BREV"
 done
 echo
 ls -l "$ROOT/hex/"*.hex
